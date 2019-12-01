@@ -23,10 +23,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "scripts/install-chocolatey.ps1"
   config.vm.provision "shell", path: "scripts/windows-updates-disable.ps1" 
   config.vm.provision "shell", path: "scripts/disable-firewall.bat"
-  config.vm.provision "shell", path: "scripts/disable-win-defend.bat"
+  config.vm.provision "shell", path: "scripts/disable-win-defend.ps1"
   config.vm.provision "shell", path: "scripts/install-icecast.ps1"
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-libreoffice.ps1"
-  config.vm.provision "shell", path: "scripts/chocolatey-installs/hashdeep.ps1"
+  config.vm.provision "shell", path: "scripts/chocolatey-installs/install-hashdeep.ps1"
   config.vm.provision "shell", path: "scripts/configs/enable-audio-services.ps1"
 
 end
