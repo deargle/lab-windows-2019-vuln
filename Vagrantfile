@@ -19,6 +19,13 @@ Vagrant.configure("2") do |config|
   end
   config.vm.network "forwarded_port", guest: 22, host: 2222
 
+  config.vm.network :private_network,
+      :ip => "192.168.56.100",
+      :libvirt__network_name => "infosec-net",
+      :libvirt__dhcp_enabled => false,
+      :libvirt__host_ip => "192.168.56.101",
+      :autostart => true
+
   config.vm.provision "shell", path: "scripts/openssh-builtin.ps1"
   config.vm.provision "shell", path: "scripts/install-chocolatey.ps1"
   config.vm.provision "shell", path: "scripts/windows-updates-disable.ps1"
