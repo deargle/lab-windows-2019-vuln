@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "peru/windows-server-2019-datacenter-x64-eval"
-  config.vm.box_version = "20200707.01"
+  config.vm.box = "peru/windows-server-2019-standard-x64-eval"
+  config.vm.box_version = "202008.01"
   config.vm.provider "libvirt" do |v|
     v.cpus = "2"
   end
