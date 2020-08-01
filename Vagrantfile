@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "peru/windows-server-2019-datacenter-x64-eval"
-  config.vm.box_version = "20191101.01"
+  config.vm.box_version = "20200707.01"
   config.vm.provider "libvirt" do |v|
     v.cpus = "2"
   end
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", path: "scripts/openssh-builtin.ps1"
   config.vm.provision "shell", path: "scripts/install-chocolatey.ps1"
-  config.vm.provision "shell", path: "scripts/windows-updates-disable.ps1" 
+  config.vm.provision "shell", path: "scripts/windows-updates-disable.ps1"
   config.vm.provision "shell", path: "scripts/disable-firewall.bat"
   config.vm.provision "shell", path: "scripts/disable-win-defend.ps1"
   config.vm.provision "shell", path: "scripts/install-icecast.ps1"
