@@ -1,3 +1,4 @@
+Set-PSDebug -Trace 1
 $ChocoInstallPath = "$env:SystemDrive\ProgramData\Chocolatey\bin"
 
 if (!(Test-Path $ChocoInstallPath)) {

@@ -1,3 +1,4 @@
+Set-PSDebug -Trace 1
 if (Test-Path "C:\Program Files (x86)\Icecast2 Win32\Icecast2.exe" -PathType Leaf){
   Write-Host "Icecast looks to be already installed. Exiting."
   Exit

@@ -1,3 +1,4 @@
+Set-PSDebug -Trace 1
 choco feature enable -n allowGlobalConfirmation
 choco install libreoffice-still
 choco feature disable -n allowGlobalConfirmation
@@ -9,4 +10,3 @@ $RegistryEntry = "Value"
 if ( -Not ( Test-Path "$RegistryKey")){New-Item -Path "$RegistryKey" -ItemType RegistryKey -Force}
 
 Set-ItemProperty -Path $RegistryKey -Name $RegistryEntry -Value "2"
-

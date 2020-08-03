@@ -1,6 +1,7 @@
+Set-PSDebug -Trace 1
 #https://gist.githubusercontent.com/loonison123/11240676/raw/e9c1a62e4eade4a4153624e1ecfb803237c59ab0/audioServicePowerShellCommands.ps1
 
-# Get services related to audio 
+# Get services related to audio
 #Get-Service | Where {$_.Name -match "audio"} | format-table -autosize
 
 # Start the services

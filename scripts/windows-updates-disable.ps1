@@ -1,3 +1,4 @@
+Set-PSDebug -Trace 1
 Clear-Host
 
 $WindowsUpdatePath = "HKLM:SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\"

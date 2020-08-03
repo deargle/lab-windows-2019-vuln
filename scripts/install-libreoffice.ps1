@@ -1,3 +1,4 @@
+Set-PSDebug -Trace 1
 cd "C:\Users\vagrant\Downloads"
 
 wget 'https://www.libreoffice.org/donate/dl/win-x86_64/6.2.8/en-US/LibreOffice_6.2.8_Win_x64.msi' -out 'libre_office.msi'
