@@ -1,0 +1,19 @@
+Windows Registry Editor Version 5.00
+
+' Created by: Shawn Brink
+' http://www.tenforums.com
+' Tutorial: http://www.tenforums.com/tutorials/15697-secure-sign-ctrl-alt-delete-enable-disable-windows-10-a.html
+
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]
+"DisableCAD"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon]
+"DisableCAD"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"DisableCAD"=-
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+"DisableCAD"=-
+
