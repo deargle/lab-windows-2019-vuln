@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
   # #######################
   # ~~~~ Provisioning ~~~~~
   # #######################
-  
+
   # Configure Windows
   config.vm.provision "file", source: "scripts/disable-CAD.reg", destination: "$HOME/disable-CAD.reg"
   config.vm.provision "shell", inline: "regedit.exe /S $HOME/disable-CAD.reg"
@@ -70,17 +70,22 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "scripts/openssh-builtin.ps1"
   config.vm.provision "shell", path: "scripts/windows-updates-disable.ps1"
   config.vm.provision "shell", path: "scripts/configs/enable-audio-services.ps1"
-  
+
   ## Take down security stuff
   config.vm.provision "shell", path: "scripts/disable-firewall.bat"
   config.vm.provision "shell", path: "scripts/disable-win-defend.ps1"
 
   # Package Installs
   config.vm.provision "shell", path: "scripts/install-icecast.ps1"
-  
+
   ## Chocolatey
   config.vm.provision "shell", path: "scripts/install-chocolatey.ps1"
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-libreoffice.ps1"
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-hashdeep.ps1"
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-google-chrome.ps1"
+
+  config.vm.provision "reboot", type: "shell", run: "never" do |s|
+    s.inline = "echo 'rebooting'"
+    s.reboot = true
+  end
 end
