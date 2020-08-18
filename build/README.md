@@ -1,5 +1,3 @@
-Just git clone this repo and vagrant up it. The [build](build/) folder has another
-set of files that were used to make the vagrant box.
 
 # Important!
 
@@ -8,8 +6,7 @@ is great because their licenses only last 180 days from build time. So,
 keep bumping the `box_version` in the vagrantfile and/or packerfile to point
 to an unexpired peru box.
 
-# Push a new version
+# Build a new version
 
-    vagrant package
-    vagrant cloud publish ...
-
+use the `package.sh` script. It will set certain sysprep options and bundle 
+the vagrantfile template. After, run `vagrant cloud publish...`
