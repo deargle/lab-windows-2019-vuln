@@ -1,1 +1,1 @@
-bcdedit.exe /set {current} nx AlwaysOff
+bcdedit.exe /set "{current}" nx AlwaysOff
