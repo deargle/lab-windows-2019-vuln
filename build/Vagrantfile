@@ -74,6 +74,7 @@ Vagrant.configure("2") do |config|
   ## Take down security stuff
   config.vm.provision "shell", path: "scripts/disable-firewall.bat"
   config.vm.provision "shell", path: "scripts/disable-win-defend.ps1"
+  config.vm.provision "shell", path: "scripts/disable-dep.bat"
 
   # Package Installs
   config.vm.provision "shell", path: "scripts/install-icecast.ps1"
