@@ -11,4 +11,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "build/scripts/create-labuser.ps1"
   config.vm.provision "shell", path: "build/scripts/disable-dep.bat"
   config.vm.provision "shell", path: "build/scripts/install-icecast.ps1"
+  config.vm.provision "shell", path: "build/scripts/set-password-not-expired.bat"
 end
