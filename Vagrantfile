@@ -12,4 +12,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "build/scripts/disable-dep.bat"
   config.vm.provision "shell", path: "build/scripts/install-icecast.ps1"
   config.vm.provision "shell", path: "build/scripts/set-password-not-expired.bat"
+
+  # to trigger, run `vagrant provision --provision-with install-word`
+  config.vm.provision "install-word", type: "shell", run: "never", path: "build/scripts/chocolatey-installs/install-word.ps1"
 end
