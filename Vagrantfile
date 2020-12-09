@@ -6,6 +6,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "libvirt" do |libvirt|
     libvirt.cpus = 4
     libvirt.memory = 4096
+    libvirt.management_network_name = 'infosec-vagrant-libvirt'
+    libvirt.management_network_autostart = true
   end
 
   config.vm.provision "shell", path: "build/scripts/create-labuser.ps1"
