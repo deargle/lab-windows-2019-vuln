@@ -17,4 +17,10 @@ Vagrant.configure("2") do |config|
 
   # to trigger, run `vagrant provision --provision-with install-word`
   config.vm.provision "install-word", type: "shell", run: "never", path: "build/scripts/chocolatey-installs/install-word.ps1"
+  
+  # to trigger, run `vagrant provision --provision-with reboot`
+  config.vm.provision "reboot", type: "shell", run: "never" do |s|
+    s.inline = "echo 'rebooting'"
+    s.reboot = true
+  end
 end
