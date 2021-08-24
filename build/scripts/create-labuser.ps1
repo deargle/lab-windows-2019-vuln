@@ -5,7 +5,7 @@ $USERNAME = "Labuser"
 
 Try {
   $Secure_String_Pwd = ConvertTo-SecureString "Passw0rd!" -AsPlainText -Force
-  New-LocalUser -Name $USERNAME -Password $Secure_String_Pwd -ErrorAction Stop
+  New-LocalUser -Name $USERNAME -Password $Secure_String_Pwd -PasswordNeverExpires -ErrorAction Stop
 }
 Catch [Microsoft.PowerShell.Commands.UserExistsException] {
   "User $($USERNAME) already exists, skipping." | Write-Host
