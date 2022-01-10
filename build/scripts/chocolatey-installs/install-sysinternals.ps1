@@ -4,4 +4,7 @@ choco feature enable -n allowGlobalConfirmation
 # the choco sysinternals package has a long history of failing checksums
 # because of their update process.
 choco install sysinternals --ignorechecksums
+choco install reshack --ignorechecksums
+choco install dependencywalker --ignorechecksums
+choco install hxd --ignorechecksums
 choco feature disable -n allowGlobalConfirmation

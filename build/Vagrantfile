@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 Vagrant.configure("2") do |config|
   config.vm.box = "peru/windows-server-2019-standard-x64-eval"
-  config.vm.box_version = "20210701.01"
+  config.vm.box_version = "20220102.01"
   config.vm.define "vuln_windows_2019"
 
   config.vm.provider "libvirt" do |libvirt|
