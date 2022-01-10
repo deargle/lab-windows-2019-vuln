@@ -18,4 +18,10 @@ Vagrant.configure("2") do |config|
     s.inline = "echo 'rebooting'"
     s.reboot = true
   end
+
+  # to trigger, run `vagrant provision --provision-with rearm`
+  config.vm.provision "rearm", type: "shell", run: "never" do |s|
+    s.inline = "slmgr /rearm"
+    s.reboot = true
+  end
 end
