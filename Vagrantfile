@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "deargle/vuln-windows-2019"
-  config.vm.box_version = "0.0.4"
+
 
   config.vm.provider "libvirt" do |libvirt|
     libvirt.cpus = 4
