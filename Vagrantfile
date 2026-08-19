@@ -1,7 +1,8 @@
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "deargle/vuln-windows-2019"
-  config.vm.box_version = "0.0.4"
+  config.vm.box = "security-assignments/vuln-windows-2019"
+  config.vm.box_version = "0.0.5"
+  config.vm.box_url     = "https://storage.googleapis.com/security-assignments-vagrant-boxes/registry/vuln-windows-2019/metadata.json"
 
   config.vm.provider "libvirt" do |libvirt|
     libvirt.cpus = 4
@@ -14,10 +15,16 @@ Vagrant.configure("2") do |config|
     libvirt.management_network_keep = true
   end
 
-  # No private_network is declared here: this VM's infosec-net interface comes
-  # from the box's embedded Vagrantfile (see build/Vagrantfile.template), so it
-  # cannot be given :libvirt__always_destroy => false from this file. Declaring
-  # the network here would ACCUMULATE a second NIC rather than merge.
+  # Declared here rather than in the box, same rationale as the other lab VMs.
+  # always_destroy false stops `vagrant destroy` of this VM deleting
+  # infosec-net out from under Metasploitable2.
+  config.vm.network :private_network,
+      :ip => "192.168.56.100",
+      :libvirt__network_name => "infosec-net",
+      :libvirt__dhcp_enabled => false,
+      :libvirt__host_ip => "192.168.56.101",
+      :libvirt__always_destroy => false,
+      :autostart => true
 
   # to trigger, run `vagrant provision --provision-with install-word`
   config.vm.provision "install-word", type: "shell", run: "never", path: "build/scripts/chocolatey-installs/install-word.ps1"
