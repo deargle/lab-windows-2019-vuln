@@ -49,11 +49,9 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
   end
 
-  config.vm.network :private_network,
-      :ip => "192.168.56.100",
-      :libvirt__network_name => "infosec-net",
-      :libvirt__dhcp_enabled => false,
-      :libvirt__host_ip => "192.168.56.101",
-      :autostart => true
+  # No private_network here on purpose. It is declared in this repo's root
+  # Vagrantfile instead, so it is git-managed and editable without a
+  # repackage. Declaring it in BOTH places does not merge - it accumulates
+  # into a duplicate NIC (observed 2026-08-18: a three-NIC Security Onion).
 
 end
