@@ -1,0 +1,6 @@
+# Staged Office media - pulled from the bucket at build time, never committed.
+*.iso
+*.ISO
+office2010.iso
+# Local override of the media download URL (may contain a signed URL).
+office-iso-url.txt

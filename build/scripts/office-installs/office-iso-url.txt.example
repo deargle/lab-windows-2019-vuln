@@ -1,0 +1,9 @@
+# Rename to office-iso-url.txt to let install-office2010.ps1 download the media
+# when no cdrom/local ISO is present (student Path B). The URL must be reachable
+# WITHOUT gcloud creds. Options:
+#   * a signed URL:  gsutil signurl -d 7d <key.json> \
+#       gs://security-assignments-vagrant-boxes/lab-isos/office2010-proplus-x86-X16-52536.iso
+#   * a public object ACL on just that one object (bucket is otherwise private)
+#   * a course HTTP mirror
+# Exactly one URL line, no quotes:
+# https://storage.googleapis.com/.../office2010-proplus-x86-X16-52536.iso
