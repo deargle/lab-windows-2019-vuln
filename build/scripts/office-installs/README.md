@@ -33,9 +33,7 @@ readable (verify: an unauthenticated GET returns 403).
 
 | file | role |
 |---|---|
-| `config-word-only.xml` | setup answer file: silent, no key, **Word only**. |
-| `install-office2010.ps1` | mount/find media → silent install → apply regkeys. Build-time (Path A) and student lab-start (Path B). |
-| `office-lab-regkeys.ps1` | zero-click readiness: suppress first-run, enable all macros + VBA object model, for the Labuser profile and machine-wide. |
+| `install-office2010.ps1` | **self-contained**: find/mount media → silent no-key, Word-only install → inline regkeys (macros + VBA on, first-run suppressed). Self-contained because Vagrant `path:` uploads only this one file. Build-time (Path A) and student lab-start (Path B). |
 | `verify-office-macro.ps1` | build gate: headless Word COM runs a VBA macro that writes a file and `Shell`s a process (what the exploit does). Non-zero exit fails the build. |
 | `office-rearm.ps1` | student lab-start step for Path A: reset the Office grace, reboot. |
 

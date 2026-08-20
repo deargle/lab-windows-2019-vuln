@@ -99,17 +99,18 @@ Vagrant.configure("2") do |config|
 
   # ---- Office 2010 (Word only) for the malicious-macro lab ----------------
   # Path A (bake Word into the box): set BAKE_OFFICE=1 at build time. Installs
-  # Word silently (no key -> 30-day grace), then FAILS THE BUILD if the VBA
-  # macro primitive the lab exploits does not actually run. The ISO is never
-  # packaged into the box (attached as a cdrom / mounted, not copied in), so
-  # the box carries only the installed product. Students then just run the
-  # `office-rearm` provisioner (see the repo-root Vagrantfile) at lab start.
+  # Word silently (no key -> 30-day grace), then FAILS THE BUILD unless Word +
+  # the VBA engine are installed and macros are enabled (verify-office-ready
+  # also attempts a real macro run, but non-fatally - see that script). The ISO
+  # is never packaged into the box (attached as a cdrom / mounted, not copied
+  # in), so the box carries only the installed product. Students then just run
+  # the `office-rearm` provisioner (see the repo-root Vagrantfile) at lab start.
   #
   # Leave BAKE_OFFICE unset to build a Path B box (no Office baked in); those
   # students install at lab start via `--provision-with install-word`.
   if ENV['BAKE_OFFICE']
     config.vm.provision "install-office", type: "shell", path: "scripts/office-installs/install-office2010.ps1"
-    config.vm.provision "verify-office",  type: "shell", path: "scripts/office-installs/verify-office-macro.ps1"
+    config.vm.provision "verify-office",  type: "shell", path: "scripts/office-installs/verify-office-ready.ps1"
   end
 
   # to trigger, run `vagrant provision --provision-with install-word`
