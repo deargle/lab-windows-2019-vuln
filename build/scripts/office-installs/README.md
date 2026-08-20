@@ -34,7 +34,8 @@ readable (verify: an unauthenticated GET returns 403).
 | file | role |
 |---|---|
 | `install-office2010.ps1` | **self-contained**: find/mount media → silent no-key, Word-only install → inline regkeys (macros + VBA on, first-run suppressed). Self-contained because Vagrant `path:` uploads only this one file. Build-time (Path A) and student lab-start (Path B). |
-| `verify-office-macro.ps1` | build gate: headless Word COM runs a VBA macro that writes a file and `Shell`s a process (what the exploit does). Non-zero exit fails the build. |
+| `verify-office-ready.ps1` | build gate: headless Word COM runs a VBA macro that writes a file and `Shell`s a process (what the exploit does). Non-zero exit fails the build. |
+| `verify-macro-lab-e2e.sh` + `w.rb` | **run-time** end-to-end check (Kali host, not guest): proves the full Part 4 chain headlessly — msfvenom `vba-exe` -> valid PE, handler binds on `192.168.56.101:7777`, Windows VM macro-ready, and the decoded payload PE **opens a meterpreter session** over the lab `.56` network. The only step left unverified is the interactive "open .docm + Enable Content" click. See its header for the `LHOST=virbr1` caveat. |
 | `office-rearm.ps1` | student lab-start step for Path A: reset the Office grace, reboot. |
 
 ## Two paths (both wired; pick after testing)
