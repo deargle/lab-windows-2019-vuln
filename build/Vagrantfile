@@ -26,9 +26,9 @@ Vagrant.configure("2") do |config|
     libvirt.hyperv_feature :name => 'vpindex',  :state => 'on'
     libvirt.memory = 2048
 
-    # Optional, for the Path A "bake Word into the box" build: attach the
-    # Office 2010 ISO as a cdrom so setup runs from the disc with no slow
-    # WinRM copy. Pull the media cheaply in-region first, e.g.:
+    # For the BAKE_OFFICE=1 build: attach the Office 2010 ISO as a cdrom so
+    # setup runs from the disc with no slow WinRM copy. Pull the media cheaply
+    # in-region first, e.g.:
     #   gsutil cp gs://security-assignments-vagrant-boxes/lab-isos/office2010-proplus-x86-X16-52536.iso ./office2010.iso
     #   BAKE_OFFICE=1 OFFICE_ISO_PATH=$PWD/office2010.iso vagrant up && vagrant provision
     if ENV['OFFICE_ISO_PATH']
@@ -96,23 +96,29 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-hashdeep.ps1"
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-sysinternals.ps1"
   config.vm.provision "shell", path: "scripts/chocolatey-installs/install-google-chrome.ps1"
+  config.vm.provision "create-chrome-shortcut", type: "shell", path: "scripts/create-chrome-shortcut.ps1"
+  config.vm.provision "install-spice-guest-tools", type: "shell", path: "scripts/chocolatey-installs/install-spice-guest-tools.ps1"
 
   # ---- Office 2010 (Word only) for the malicious-macro lab ----------------
-  # Path A (bake Word into the box): set BAKE_OFFICE=1 at build time. Installs
-  # Word silently (no key -> 30-day grace), then FAILS THE BUILD unless Word +
-  # the VBA engine are installed and macros are enabled (verify-office-ready
-  # also attempts a real macro run, but non-fatally - see that script). The ISO
-  # is never packaged into the box (attached as a cdrom / mounted, not copied
-  # in), so the box carries only the installed product. Students then just run
-  # the `office-rearm` provisioner (see the repo-root Vagrantfile) at lab start.
-  #
-  # Leave BAKE_OFFICE unset to build a Path B box (no Office baked in); those
-  # students install at lab start via `--provision-with install-word`.
+  # Word is baked into the box at build time: set BAKE_OFFICE=1 when building.
+  # Installs Word silently (no key -> 30-day grace), then FAILS THE BUILD
+  # unless Word + the VBA engine are installed and macros are enabled
+  # (verify-office-ready also attempts a real macro run, but non-fatally - see
+  # that script). The ISO is never packaged into the box (attached as a cdrom
+  # / mounted, not copied in), so the box carries only the installed product.
+  # Students run the `office-rearm` provisioner (see the repo-root Vagrantfile)
+  # at lab start to reset the grace period on a shelved box.
   if ENV['BAKE_OFFICE']
     config.vm.provision "install-office", type: "shell", path: "scripts/office-installs/install-office2010.ps1"
     config.vm.provision "verify-office",  type: "shell", path: "scripts/office-installs/verify-office-ready.ps1"
   end
 
+  # Build gate: Chrome desktop shortcut resolves + SPICE guest agent running.
+  # Runs unconditionally (not gated behind BAKE_OFFICE).
+  config.vm.provision "verify-desktop-apps", type: "shell", path: "scripts/verify-desktop-apps.ps1"
+
+  # Fallback path for a box that was NOT built with BAKE_OFFICE=1: installs
+  # Word at lab start instead of at build time.
   # to trigger, run `vagrant provision --provision-with install-word`
   config.vm.provision "install-word", type: "shell", run: "never", path: "scripts/office-installs/install-office2010.ps1"
 
