@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "security-assignments/vuln-windows-2019"
-  config.vm.box_version = "0.0.5"
+  config.vm.box_version = "0.0.6"
   config.vm.box_url     = "https://storage.googleapis.com/security-assignments-vagrant-boxes/registry/vuln-windows-2019/metadata.json"
 
   config.vm.provider "libvirt" do |libvirt|
