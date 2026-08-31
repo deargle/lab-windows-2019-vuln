@@ -33,18 +33,21 @@ readable (verify: an unauthenticated GET returns 403).
 
 | file | role |
 |---|---|
-| `install-office2010.ps1` | **self-contained**: find/mount media → silent no-key, Word-only install → inline regkeys (macros + VBA on, first-run suppressed). Self-contained because Vagrant `path:` uploads only this one file. Build-time (Path A) and student lab-start (Path B). |
+| `install-office2010.ps1` | **self-contained**: find/mount media → silent no-key, Word-only install → inline regkeys (macros + VBA on, first-run suppressed). Self-contained because Vagrant `path:` uploads only this one file. Runs at build time (normal path) and can also be triggered at lab start as a fallback. |
 | `verify-office-ready.ps1` | build gate: headless Word COM runs a VBA macro that writes a file and `Shell`s a process (what the exploit does). Non-zero exit fails the build. |
 | `verify-macro-lab-e2e.sh` + `w.rb` | **run-time** end-to-end check (Kali host, not guest): proves the full Part 4 chain headlessly — msfvenom `vba-exe` -> valid PE, handler binds on `192.168.56.101:7777`, Windows VM macro-ready, and the decoded payload PE **opens a meterpreter session** over the lab `.56` network. The only step left unverified is the interactive "open .docm + Enable Content" click. See its header for the `LHOST=virbr1` caveat. |
-| `office-rearm.ps1` | student lab-start step for Path A: reset the Office grace, reboot. |
+| `office-rearm.ps1` | student lab-start step: reset the Office grace, reboot. |
 
-## Two paths (both wired; pick after testing)
+## Deployment: Word baked into the box
 
-**Path A — bake Word into the box; student rearms.**
-Least clicks at lab time (Word already installed; one `office-rearm`; zero
-in-Windows clicks if suppression holds) and every published box is verified at
-build. Cost: requires a **box rebuild + republish**, and correctness depends on
-`OSPPREARM` reviving a *cloned, possibly-expired* box — the main thing to test.
+Word is installed at build time (`BAKE_OFFICE=1`) and shipped baked into the
+published box; the ISO itself is never packaged (attached as a cdrom /
+mounted, not copied in). Every published box is verified at build time by
+`verify-office-ready.ps1`, which fails the build if Word + the VBA engine
+aren't installed and macro-ready. At lab start the student just runs
+`office-rearm` to reset the ~30-day grace on a possibly-shelved box —
+zero in-Windows clicks, since first-run suppression is stamped in via the
+Default-hive + HKLM policy regkeys in `install-office2010.ps1`.
 
 Build it (recommended on a GCP nested-virt box so the pull is in-region/free):
 
@@ -59,30 +62,15 @@ Student, at lab start:
 
     vagrant provision --provision-with office-rearm
 
-**Path B — ship a box with no Office; student installs at lab start.**
-**No box rebuild needed** — just this repo's script plus a reachable media URL,
-so it's the cheap way to ship/iterate. Cost: a ~5–10 min silent install at lab
-start (measure it — that was the open question). The student's box has no gcloud
-creds, so `install-office2010.ps1` needs the media over plain HTTPS. Supply it via
-`office-iso-url.txt` (see `office-iso-url.txt.example`): a `gsutil signurl`
-signed URL, a public ACL on just that one object, or a course mirror.
+### Fallback: box built without BAKE_OFFICE=1
+
+If a box was shipped without Office baked in, install Word at lab start
+instead. The student's box has no gcloud creds, so `install-office2010.ps1`
+needs the media over plain HTTPS. Supply it via `office-iso-url.txt` (see
+`office-iso-url.txt.example`): a `gsutil signurl` signed URL, a public ACL on
+just that one object, or a course mirror.
 
     vagrant provision --provision-with install-word
-
-## Test checklist (open questions to close when a build is run)
-
-1. **Install time (Path B).** How long is the silent Word-only install on the
-   2-vCPU/2 GB box? If it's short and unattended, Path B may be good enough.
-2. **Zero clicks.** First launch of Word as **Labuser** must show no first-run,
-   privacy, or activation dialog. Confirm `office-lab-regkeys.ps1` fully
-   suppresses them (the Default-hive stamping is the uncertain part).
-3. **Verify gate.** `verify-office-macro.ps1` exits 0 on a fresh install.
-4. **Rearm-from-expired (Path A).** Package a box, let its grace expire (or fast-
-   forward the clock), clone it, boot, run `office-rearm` → Word is fully
-   functional again. This is the make-or-break test for Path A; if `OSPPREARM`
-   won't recover a fully-expired clone, fall back to Path B.
-5. **Clone/CMID.** Confirm the packaged grace state behaves on a fresh clone
-   (Vagrant `package` is not a sysprep generalize).
 
 ## Notes
 

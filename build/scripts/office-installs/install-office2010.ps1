@@ -9,16 +9,17 @@ Set-PSDebug -Trace 1
 # SELF-CONTAINED on purpose: Vagrant's `shell` provisioner with `path:` uploads
 # only THIS one file to the guest, so the setup config and the registry tuning
 # are generated inline here rather than read from sibling files. Used two ways:
-#   * BUILD TIME (Path A): baked in via build/Vagrantfile (BAKE_OFFICE=1).
-#   * LAB START  (Path B): `vagrant provision --provision-with install-word`.
+#   * BUILD TIME (normal path): baked in via build/Vagrantfile (BAKE_OFFICE=1).
+#   * LAB START (fallback): `vagrant provision --provision-with install-word`,
+#     for a box that was not built with BAKE_OFFICE=1.
 #
 # MEDIA SOURCE, looked for in order:
 #   1. A CD/DVD drive containing \setup.exe and \ProPlus.WW  (attach the ISO as
 #      a libvirt cdrom - fast, no copy).
 #   2. A local .iso at $env:OFFICE_ISO_PATH or C:\ProgramData\lab-assets\office2010.iso
 #      (mounted with Mount-DiskImage).
-#   3. A URL in $env:OFFICE_ISO_URL (student Path B; must be reachable without
-#      gcloud creds - signed URL / public object / mirror).
+#   3. A URL in $env:OFFICE_ISO_URL (lab-start fallback install; must be
+#      reachable without gcloud creds - signed URL / public object / mirror).
 #
 # Media: gs://security-assignments-vagrant-boxes/lab-isos/office2010-proplus-x86-X16-52536.iso
 #        sha1 9f1d385a8989c4d4951b55f0edfaea9066b8f54e

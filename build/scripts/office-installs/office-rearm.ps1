@@ -3,8 +3,8 @@ Set-PSDebug -Trace 1
 # office-rearm.ps1
 #
 # Reset Office 2010's no-key grace period back to a fresh ~30 days. The student
-# runs this at lab start (Path A) so a box that has been on the shelf - and may
-# already be in reduced-functionality mode - comes back fully functional.
+# runs this at lab start so a box that has been on the shelf - and may already
+# be in reduced-functionality mode - comes back fully functional.
 #
 # This rearms OFFICE, which is separate from Windows' own `slmgr /rearm`.
 # Office 2010 allows up to 5 rearms per install. A REBOOT is required after,
@@ -19,7 +19,7 @@ $osppRearm = @(
 ) | Where-Object { Test-Path $_ } | Select-Object -First 1
 
 if (-not $osppRearm) {
-  throw "OSPPREARM.EXE not found. Is Office 2010 installed? (Path A ships it baked in.)"
+  throw "OSPPREARM.EXE not found. Is Office 2010 installed? (The box ships it baked in.)"
 }
 
 Write-Host "office-rearm: running $osppRearm ..."
