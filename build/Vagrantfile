@@ -82,6 +82,16 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "scripts/windows-updates-disable.ps1"
   config.vm.provision "shell", path: "scripts/configs/enable-audio-services.ps1"
 
+  # ---- Get off the expired Server 2019 evaluation SKU ---------------------
+  # The base box's eval expired years ago and there is no un-expired version of
+  # it to rebase onto, so an untreated box force-shuts-down hourly. Convert the
+  # Eval SKU to full ServerStandard, reboot to apply, then gate on it. Must run
+  # BEFORE the Office steps: those take ~30 min and there is no point paying
+  # that on a box that is going to fail the licensing gate anyway.
+  config.vm.provision "convert-eval-to-standard", type: "shell", path: "scripts/convert-eval-to-standard.ps1"
+  config.vm.provision "reboot-after-edition-change", type: "shell", reboot: true, inline: "Write-Host 'rebooting to apply edition change'"
+  config.vm.provision "verify-windows-licensing", type: "shell", path: "scripts/verify-windows-licensing.ps1"
+
   ## Take down security stuff
   config.vm.provision "shell", path: "scripts/disable-firewall.bat"
   config.vm.provision "shell", path: "scripts/disable-win-defend.ps1"
